@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion / Inscription - EarthPulse</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            justify-content: center;
+            align-items: center;
+            background: url('arriere\ plan\ 2.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+        header {
+            text-align: center;
+            padding: 30px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #387f6e, #ff7e5b);
+            color: white;
+            border-radius: 15px 15px 0 0;
+            width: 100%;
+            transition: background 0.5s ease;
+        }
+        header:hover {
+            background: linear-gradient(45deg, #ff7e5b, #3f8968);
+        }
+        .button-container {
+            margin-bottom: 20px;
+        }
+        .button-container button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            background-color: #3dca9d;
+            color: #ffffff;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-weight: bold;
+            outline: none;
+        }
+        .button-container button:hover {
+            background-color: #B0C4DE;
+        }
+        .container {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            opacity: 0;
+            display: none;
+            transition: opacity 0.5s ease-in-out;
+        }
+        .container.show {
+            opacity: 1;
+            display: block;
+        }
+        h2 {
+            color: #4d9d2f;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 2px solid #ccc;
+            border-radius: 6px;
+            transition: border-color 0.3s;
+        }
+        input:focus {
+            border-color: #3eafa0;
+            outline: none;
+        }
+        .password-strength {
+            margin: 10px 0;
+            height: 5px;
+            border-radius: 5px;
+            background-color: #f3f3f3;
+        }
+        .strength-weak {
+            background-color: red;
+            width: 30%;
+        }
+        .strength-medium {
+            background-color: orange;
+            width: 60%;
+        }
+        .strength-strong {
+            background-color: green;
+            width: 100%;
+        }
+        button.submit {
+            width: 100%;
+            padding: 12px;
+            background-color: #3dca9d;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        button.submit:hover {
+            background-color: #B0C4DE;
+        }
+        .error {
+            color: red;
+            font-size: 0.8em;
+            margin-top: -8px;
+            margin-bottom: 10px;
+        }
+        .motivational-message {
+            text-align: center;
+            margin-top: 15px;
+            color: #3B3B3B;
+            font-size: 0.85em;
+            line-height: 1.4;
+        }
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: #FFF;
+            padding: 10px 20px;
+            border-radius: 5px;
+            opacity: 0;
+            transition: opacity 0.5s;
+            z-index: 100;
+        }
+        footer {
+            margin-top: auto;
+            background-color: #3da886;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+            width: 100%;
+        }
+        footer a {
+            color: #ffffff;
+            text-decoration: none;
+            margin: 0 10px;
+            transition: color 0.3s;
+        }
+        footer a:hover {
+            color: #B0C4DE;
+        }
+        @media (max-width: 600px) {
+            .container {
+                width: 90%;
+            }
+            h2 {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1 style="margin: 0; font-size: 2.5em;"><i class="fas fa-globe"></i> EarthPulse</h1>
+    </header>
+
+    <div class="button-container">
+        <button id="showLogin">Connexion</button>
+        <button id="showRegister">Inscription</button>
+    </div>
+
+    <div class="container show" id="loginContainer">
+        <h2><i class="fas fa-sign-in-alt"></i> Connexion</h2>
+        <form id="loginForm" aria-labelledby="loginHeader" aria-required="true">
+            <input type="text" id="username" placeholder="Nom d'utilisateur" required aria-label="Nom d'utilisateur" />
+            <div class="error" id="loginUsernameError" role="alert"></div>
+            <input type="password" id="password" placeholder="Mot de passe" required aria-label="Mot de passe" />
+            <div class="error" id="loginPasswordError" role="alert"></div>
+            <button type="submit" class="submit">Se connecter</button>
+        </form>
+        <div class="motivational-message">Inscrivez-vous pour profiter de toutes nos fonctionnalités!</div>
+    </div>
+
+    <div class="container" id="registerContainer">
+        <h2><i class="fas fa-user-plus"></i> S'inscrire</h2>
+        <form id="registerForm" aria-labelledby="registerHeader" aria-required="true">
+            <input type="text" id="newUsername" placeholder="Nom d'utilisateur" required aria-label="Nom d'utilisateur" />
+            <div class="error" id="registerUsernameError" role="alert"></div>
+            <input type="email" id="newEmail" placeholder="E-mail" required aria-label="E-mail" />
+            <div class="error" id="registerEmailError" role="alert"></div>
+            <input type="password" id="newPassword" placeholder="Mot de passe" required aria-label="Mot de passe" />
+            <div class="password-strength" id="passwordStrength"></div>
+            <div class="error" id="registerPasswordError" role="alert"></div>
+            <input type="password" id="confirmPassword" placeholder="Confirmer le mot de passe" required aria-label="Confirmer le mot de passe" />
+            <div class="error" id="confirmPasswordError" role="alert"></div>
+            <button type="submit" class="submit">Créer un compte</button>
+        </form>
+        <div class="motivational-message">Rejoignez-nous pour découvrir un monde d'opportunités!</div>
+    </div>
+
+    <div id="toast" class="toast" aria-live="polite">Message ici</div>
+
+    <footer>
+        <p>&copy; 2024 EarthPulse. Surveiller-Analyser-Prévenir.</p>
+        <p>
+            <a href="#about">À propos</a> |
+            <a href="#contact">Contact</a> |
+            <a href="#privacy">Politique de confidentialité</a>
+        </p>
+    </footer>
+
+    <script>
+        const strengthDisplay = document.getElementById('passwordStrength');
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.display = 'block';
+            toast.style.opacity = '1';
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => {
+                    toast.style.display = 'none';
+                }, 500);
+            }, 3000);
+        }
+
+        function calculateStrength(password) {
+            let strength = 0;
+            strength += password.length >= 8 ? 1 : 0; // Longueur
+            strength += /[A-Z]/.test(password) ? 1 : 0; // Majuscules
+            strength += /[a-z]/.test(password) ? 1 : 0; // Minuscules
+            strength += /\d/.test(password) ? 1 : 0; // Chiffres
+            strength += /[!@#$%^&*]/.test(password) ? 1 : 0; // Caractères spéciaux
+
+            return strength;
+        }
+
+        function updateStrengthIndicator(password) {
+            const strength = calculateStrength(password);
+            strengthDisplay.className = 'password-strength'; // reset class
+            if (strength === 1) {
+                strengthDisplay.classList.add('strength-weak');
+            } else if (strength === 2) {
+                strengthDisplay.classList.add('strength-medium');
+            } else if (strength >= 3) {
+                strengthDisplay.classList.add('strength-strong');
+            }
+        }
+
+        document.getElementById('showRegister').addEventListener('click', function () {
+            toggleForms(true);
+        });
+
+        document.getElementById('showLogin').addEventListener('click', function () {
+            toggleForms(false);
+        });
+
+        document.getElementById('newPassword').addEventListener('input', function () {
+            const password = this.value;
+            updateStrengthIndicator(password);
+        });
+
+        document.getElementById('registerForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const newUsername = document.getElementById('newUsername').value.trim();
+            const newEmail = document.getElementById('newEmail').value.trim();
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            // Reset errors
+            document.getElementById('registerUsernameError').textContent = '';
+            document.getElementById('registerEmailError').textContent = '';
+            document.getElementById('registerPasswordError').textContent = '';
+            document.getElementById('confirmPasswordError').textContent = '';
+
+            // Validations
+            if (newPassword !== confirmPassword) {
+                document.getElementById('confirmPasswordError').textContent = "Les mots de passe ne correspondent pas.";
+                return;
+            }
+
+            // Sending registration data to backend
+            fetch('/api/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    username: newUsername,
+                    email: newEmail,
+                    password: newPassword
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast(`Compte créé pour ${newUsername}!`);
+                    document.getElementById('registerForm').reset();
+                    strengthDisplay.className = 'password-strength'; // reset strength indicator
+
+                    // Automatically log the user in
+                    return loginUser(newUsername, newPassword);
+                } else {
+                    document.getElementById('registerUsernameError').textContent = data.message;
+                }
+            })
+            .catch(error => {
+                showToast('Erreur lors de la création du compte.');
+            });
+        });
+
+        function loginUser(username, password) {
+            // Sending login data to backend
+            fetch('/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    username: username,
+                    password: password
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast(`Bienvenue ${username}!`);
+                    // Redirection vers une autre page
+                    window.location.href = 'index.html';
+                } else {
+                    showToast('Erreur lors de la connexion.');
+                }
+            })
+            .catch(() => {
+                showToast('Erreur lors de la connexion.');
+            });
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+
+            // Reset errors
+            document.getElementById('loginUsernameError').textContent = '';
+            document.getElementById('loginPasswordError').textContent = '';
+
+            // Sending login data to backend
+            fetch('/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    username: username,
+                    password: password
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast(`Bienvenue ${username}!`);
+                    // Redirection vers une autre page
+                    window.location.href = 'index.html';
+                } else {
+                    document.getElementById('loginUsernameError').textContent = "Identifiants incorrects.";
+                    document.getElementById('loginPasswordError').textContent = "Identifiants incorrects.";
+                }
+            })
+            .catch(() => {
+                showToast('Erreur lors de la connexion.');
+            });
+        });
+
+        function toggleForms(isRegistering) {
+            const loginContainer = document.getElementById('loginContainer');
+            const registerContainer = document.getElementById('registerContainer');
+
+            if (isRegistering) {
+                loginContainer.classList.remove('show');
+                registerContainer.classList.add('show');
+            } else {
+                registerContainer.classList.remove('show');
+                loginContainer.classList.add('show');
+            }
+        }
+
+        // Afficher le conteneur de connexion par défaut
+        toggleForms(false);
+    </script>
+</body>
+</html>
